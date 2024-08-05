@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 func init() {
@@ -14,5 +14,15 @@ func init() {
 }
 
 func main() {
-	fmt.Println("It's OK!")
+	if err := InitConfig(); err != nil {
+		log.WithField("Err: ", err.Error()).Error("Couldn't read config")
+	}
+	log.Info("It's OK!")
+
+}
+
+func InitConfig() error {
+	viper.AddConfigPath("configs")
+	viper.SetConfigName("config")
+	return viper.ReadInConfig()
 }
