@@ -1,10 +1,11 @@
  docker run --name=reminder-db -e POSTGRES_PASSWORD=qwerty -p 5436:5432 -d postgres 
  docker ps
  migrate create -ext psql -dir schema -seq create_reminder_tables 
+ docker start reminder-db
 
  migrate -path ./schema -database 'postgres://postgres:qwerty@localhost:5436/postgres?sslmode=disable' up 
 
  docker ps
- docker exec -it 853a2568062f /bin/bash
+ docker exec -it f581088f4dac /bin/bash
   psql -U postgres
   select * from reminds;

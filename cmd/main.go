@@ -17,7 +17,7 @@ func main() {
 	if err := InitConfig(); err != nil {
 		log.WithField("Err: ", err.Error()).Error("Couldn't read config")
 	}
-	log.Info("It's OK!")
+	
 
 }
 
