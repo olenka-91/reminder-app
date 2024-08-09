@@ -1,6 +1,9 @@
 package service
 
-import "github.com/olenka--91/reminder-app/internal/domain"
+import (
+	"github.com/olenka--91/reminder-app/internal/domain"
+	"github.com/olenka--91/reminder-app/internal/repository"
+)
 
 type Remind interface {
 	Create(userID int, remind domain.Remind) (int, error)
@@ -12,4 +15,8 @@ type Remind interface {
 
 type Service struct {
 	Remind
+}
+
+func NewService(r *repository.Repository) *Service {
+	return &Service{Remind: NewRemindService(r)}
 }
