@@ -26,6 +26,7 @@ func (r *RemindPostgres) GetAll(userID int) ([]domain.Remind, error) {
 func (r *RemindPostgres) Delete(userID, remindID int) error {
 	return nil
 }
-func (r *RemindPostgres) Update(userID int, input domain.RemindUpdateInput) error {
+func (r *RemindPostgres) Update(userID, remindID int, input domain.RemindUpdateInput) error {
 	return nil
+
 }

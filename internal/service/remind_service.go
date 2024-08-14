@@ -26,10 +26,10 @@ func (r *RemindService) GetAll(userID int) ([]domain.Remind, error) {
 func (r *RemindService) Delete(userID, remindID int) error {
 	return r.repo.Delete(userID, remindID)
 }
-func (r *RemindService) Update(userID int, input domain.RemindUpdateInput) error {
+func (r *RemindService) Update(userID, remindID int, input domain.RemindUpdateInput) error {
 	if err := input.Validate(); err != nil {
 		return err
 	}
-	return r.repo.Update(userID, input)
+	return r.repo.Update(userID, remindID, input)
 
 }

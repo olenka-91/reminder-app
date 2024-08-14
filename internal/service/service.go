@@ -10,7 +10,7 @@ type Remind interface {
 	GetByID(userID int, remindID int) (domain.Remind, error)
 	GetAll(userID int) ([]domain.Remind, error)
 	Delete(userID, remindID int) error
-	Update(userID int, input domain.RemindUpdateInput) error
+	Update(userID, remindID int, input domain.RemindUpdateInput) error
 }
 
 type Service struct {
