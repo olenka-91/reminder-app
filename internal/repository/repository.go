@@ -13,10 +13,17 @@ type Remind interface {
 	Update(userID, remindID int, input domain.RemindUpdateInput) error
 }
 
+type Authorization interface {
+	CreateUser(u domain.User) (int, error)
+	GetUser(username, password string) (domain.User, error)
+}
+
 type Repository struct {
 	Remind
+	Authorization
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
-	return &Repository{Remind: NewRemindPostgres(db)}
+	return &Repository{Remind: NewRemindPostgres(db),
+		Authorization: NewAuthPostgres(db)}
 }

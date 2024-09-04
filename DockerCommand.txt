@@ -4,6 +4,7 @@
  docker start reminder-db
 
  migrate -path ./schema -database 'postgres://postgres:qwerty@localhost:5436/postgres?sslmode=disable' up 
+ migrate -path ./schema -database 'postgres://postgres:qwerty@localhost:5436/postgres?sslmode=disable' force 1
 
  docker ps
  docker exec -it f581088f4dac /bin/bash

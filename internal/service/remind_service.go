@@ -6,10 +6,10 @@ import (
 )
 
 type RemindService struct {
-	repo *repository.Repository
+	repo repository.Remind
 }
 
-func NewRemindService(r *repository.Repository) *RemindService {
+func NewRemindService(r repository.Remind) *RemindService {
 	return &RemindService{repo: r}
 }
 

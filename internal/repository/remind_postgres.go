@@ -23,7 +23,7 @@ func (r *RemindPostgres) Create(userID int, rem domain.Remind) (int, error) {
 		return 0, nil
 	}
 
-	queryString := fmt.Sprintf("INSERT INTO %s (title, msg, remind_date) VALUES ($1,$2,$3) RETURNING id", RemindTable)
+	queryString := fmt.Sprintf("INSERT INTO %s (title, msg, remind_date) VALUES ($1,$2,$3) RETURNING id", remindTable)
 	row := tx.QueryRow(queryString, rem.Title, rem.Msg, rem.RemindDate)
 	var id int
 	if err := row.Scan(&id); err != nil {
@@ -35,7 +35,7 @@ func (r *RemindPostgres) Create(userID int, rem domain.Remind) (int, error) {
 }
 func (r *RemindPostgres) GetByID(userID int, remindID int) (domain.Remind, error) {
 	var rem domain.Remind
-	queryString := fmt.Sprintf("SELECT t.id, t.title, t.msg, t.remind_date as RemindDate FROM %s t WHERE t.id=$1", RemindTable)
+	queryString := fmt.Sprintf("SELECT t.id, t.title, t.msg, t.remind_date as RemindDate FROM %s t WHERE t.id=$1", remindTable)
 	err := r.db.Get(&rem, queryString, remindID)
 
 	return rem, err
@@ -43,14 +43,14 @@ func (r *RemindPostgres) GetByID(userID int, remindID int) (domain.Remind, error
 
 func (r *RemindPostgres) GetAll(userID int) ([]domain.Remind, error) {
 	var rem []domain.Remind
-	queryString := fmt.Sprintf("SELECT t.id, t.title, t.msg, t.remind_date as RemindDate FROM %s t", RemindTable)
+	queryString := fmt.Sprintf("SELECT t.id, t.title, t.msg, t.remind_date as RemindDate FROM %s t", remindTable)
 	err := r.db.Select(&rem, queryString)
 
 	return rem, err
 }
 
 func (r *RemindPostgres) Delete(userID, remindID int) error {
-	queryString := fmt.Sprintf("DELETE FROM %s t WHERE t.id=$1", RemindTable)
+	queryString := fmt.Sprintf("DELETE FROM %s t WHERE t.id=$1", remindTable)
 	_, err := r.db.Exec(queryString, remindID)
 	return err
 }
@@ -79,7 +79,7 @@ func (r *RemindPostgres) Update(userID, remindID int, input domain.RemindUpdateI
 	}
 
 	updateString := strings.Join(setValues, " ,")
-	queryString := fmt.Sprintf("UPDATE %s t SET %s WHERE id = $%d", RemindTable, updateString, argIDs)
+	queryString := fmt.Sprintf("UPDATE %s t SET %s WHERE id = $%d", remindTable, updateString, argIDs)
 	args = append(args, remindID)
 
 	logrus.Debugf("updateQuery: %s", queryString)

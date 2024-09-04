@@ -13,10 +13,18 @@ type Remind interface {
 	Update(userID, remindID int, input domain.RemindUpdateInput) error
 }
 
+type Authorization interface {
+	CreateUser(user domain.User) (int, error)
+	GenerateToken(username, password string) (string, error)
+	ParseToken(accessToken string) (int, error)
+}
+
 type Service struct {
 	Remind
+	Authorization
 }
 
 func NewService(r *repository.Repository) *Service {
-	return &Service{Remind: NewRemindService(r)}
+	return &Service{Remind: NewRemindService(r.Remind),
+		Authorization: NewAuthService(r.Authorization)}
 }

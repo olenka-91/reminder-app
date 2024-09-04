@@ -25,6 +25,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		remind.DELETE("/:id", h.deleteRemind)
 	}
 
+	users := router.Group("/user")
+	{
+		users.POST("/sign-up", h.signUp)
+		users.POST("/sign-in", h.signIn)
+	}
+
 	return router
 
 }
