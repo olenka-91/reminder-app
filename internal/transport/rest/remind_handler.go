@@ -15,6 +15,7 @@ func (h *Handler) createRemind(ctx *gin.Context) {
 	if err := ctx.BindJSON(&input); err != nil {
 		logrus.Error(err.Error())
 	}
+	
 
 	id, err := h.services.Remind.Create(0, input)
 
