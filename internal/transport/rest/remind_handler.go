@@ -10,15 +10,17 @@ import (
 )
 
 func (h *Handler) createRemind(ctx *gin.Context) {
-	var input domain.Remind
+	UserID, err := getUserId(ctx)
+	if err != nil {
+		logrus.Error(err.Error())
+	}
 
+	var input domain.Remind
 	if err := ctx.BindJSON(&input); err != nil {
 		logrus.Error(err.Error())
 	}
-	
 
-	id, err := h.services.Remind.Create(0, input)
-
+	id, err := h.services.Remind.Create(UserID, input)
 	if err != nil {
 		newErrorResponce(ctx, http.StatusInternalServerError, err.Error())
 	}

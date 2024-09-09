@@ -23,8 +23,8 @@ func (r *RemindPostgres) Create(userID int, rem domain.Remind) (int, error) {
 		return 0, nil
 	}
 
-	queryString := fmt.Sprintf("INSERT INTO %s (title, msg, remind_date) VALUES ($1,$2,$3) RETURNING id", remindTable)
-	row := tx.QueryRow(queryString, rem.Title, rem.Msg, rem.RemindDate)
+	queryString := fmt.Sprintf("INSERT INTO %s (user_id, title, msg, remind_date) VALUES ($1,$2,$3,$4) RETURNING id", remindTable)
+	row := tx.QueryRow(queryString, userID, rem.Title, rem.Msg, rem.RemindDate)
 	var id int
 	if err := row.Scan(&id); err != nil {
 		tx.Rollback()

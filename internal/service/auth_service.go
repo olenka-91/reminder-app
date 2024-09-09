@@ -9,6 +9,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/olenka--91/reminder-app/internal/domain"
 	"github.com/olenka--91/reminder-app/internal/repository"
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -19,7 +20,7 @@ const (
 
 type tokenClaims struct {
 	jwt.StandardClaims
-	UserID int `json:"user_id"`
+	UserId int `json:"user_id"`
 }
 
 type AuthService struct {
@@ -48,6 +49,7 @@ func (r *AuthService) GenerateToken(username, password string) (string, error) {
 		},
 		user.ID,
 	})
+	logrus.Debug("user.ID = ", user.ID)
 
 	return token.SignedString([]byte(signingKey))
 
@@ -68,7 +70,7 @@ func (r *AuthService) ParseToken(accessToken string) (int, error) {
 	if !ok {
 		return 0, errors.New("bad claims format")
 	}
-	return claims.UserID, nil
+	return claims.UserId, nil
 }
 
 func generatePasswordHash(pass string) string {
