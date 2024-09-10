@@ -10,7 +10,7 @@ import (
 )
 
 func (h *Handler) createRemind(ctx *gin.Context) {
-	UserID, err := getUserId(ctx)
+	userID, err := getUserId(ctx)
 	if err != nil {
 		logrus.Error(err.Error())
 	}
@@ -20,7 +20,7 @@ func (h *Handler) createRemind(ctx *gin.Context) {
 		logrus.Error(err.Error())
 	}
 
-	id, err := h.services.Remind.Create(UserID, input)
+	id, err := h.services.Remind.Create(userID, input)
 	if err != nil {
 		newErrorResponce(ctx, http.StatusInternalServerError, err.Error())
 	}
@@ -36,8 +36,12 @@ type getAllRemindsData struct {
 }
 
 func (h *Handler) getAllReminds(ctx *gin.Context) {
-
-	res, err := h.services.Remind.GetAll(0)
+	userID, err := getUserId(ctx)
+	if err != nil {
+		logrus.Error(err.Error())
+	}
+	//logrus.Debug("userID=", userID)
+	res, err := h.services.Remind.GetAll(userID)
 
 	if err != nil {
 		newErrorResponce(ctx, http.StatusInternalServerError, err.Error())
@@ -49,14 +53,17 @@ func (h *Handler) getAllReminds(ctx *gin.Context) {
 }
 
 func (h *Handler) getRemindByID(ctx *gin.Context) {
-
+	userID, err := getUserId(ctx)
+	if err != nil {
+		logrus.Error(err.Error())
+	}
 	remindID, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		newErrorResponce(ctx, http.StatusBadRequest, "bad id in request")
 		return
 	}
 
-	res, err := h.services.Remind.GetByID(0, remindID)
+	res, err := h.services.Remind.GetByID(userID, remindID)
 
 	if err != nil {
 		newErrorResponce(ctx, http.StatusInternalServerError, err.Error())
@@ -67,13 +74,18 @@ func (h *Handler) getRemindByID(ctx *gin.Context) {
 }
 
 func (h *Handler) deleteRemind(ctx *gin.Context) {
+	userID, err := getUserId(ctx)
+	if err != nil {
+		logrus.Error(err.Error())
+	}
+
 	remindID, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		newErrorResponce(ctx, http.StatusBadRequest, "bad id in request")
 		return
 	}
 
-	err = h.services.Remind.Delete(0, remindID)
+	err = h.services.Remind.Delete(userID, remindID)
 	if err != nil {
 		newErrorResponce(ctx, http.StatusBadRequest, err.Error())
 		return
@@ -85,6 +97,10 @@ func (h *Handler) deleteRemind(ctx *gin.Context) {
 }
 
 func (h *Handler) updateRemind(ctx *gin.Context) {
+	userID, err := getUserId(ctx)
+	if err != nil {
+		logrus.Error(err.Error())
+	}
 	remindID, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		newErrorResponce(ctx, http.StatusBadRequest, "bad id in request")
@@ -97,7 +113,7 @@ func (h *Handler) updateRemind(ctx *gin.Context) {
 		return
 	}
 
-	err = h.services.Remind.Update(0, remindID, input)
+	err = h.services.Remind.Update(userID, remindID, input)
 	if err != nil {
 		newErrorResponce(ctx, http.StatusInternalServerError, err.Error())
 		return

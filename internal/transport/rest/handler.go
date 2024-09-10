@@ -16,7 +16,7 @@ func NewHandler(serv *service.Service) *Handler {
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
-	remind := router.Group("/remind")
+	remind := router.Group("/remind", h.userIdentity)
 	{
 		remind.POST("/", h.createRemind)
 		remind.GET("/", h.getAllReminds)
