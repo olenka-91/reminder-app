@@ -12,13 +12,15 @@ func (h *Handler) signUp(ctx *gin.Context) {
 	var input domain.User
 
 	if err := ctx.BindJSON(&input); err != nil {
-		logrus.Error(err.Error())
+		newErrorResponce(ctx, http.StatusBadRequest, "invalid input body")
+		return
 	}
 
 	id, err := h.services.Authorization.CreateUser(input)
 
 	if err != nil {
 		newErrorResponce(ctx, http.StatusInternalServerError, err.Error())
+		return
 	}
 
 	ctx.JSON(http.StatusOK, map[string]interface{}{

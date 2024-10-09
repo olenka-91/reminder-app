@@ -16,14 +16,12 @@ const (
 func getUserId(c *gin.Context) (int, error) {
 	id, ok := c.Get(userCtx)
 	if !ok {
-		newErrorResponce(c, http.StatusInternalServerError, "UserID not found")
 		return 0, errors.New("UserID not found")
 	}
 
 	IntID, ok := id.(int)
 	if !ok {
-		newErrorResponce(c, http.StatusInternalServerError, "UserID is of bad type")
-		return 0, errors.New("UserID ias of bad type")
+		return 0, errors.New("UserID is of bad type")
 	}
 	return IntID, nil
 }
@@ -31,13 +29,18 @@ func getUserId(c *gin.Context) (int, error) {
 func (h *Handler) userIdentity(c *gin.Context) {
 	header := c.GetHeader(authorizationHeader)
 	if header == "" {
-		newErrorResponce(c, http.StatusUnauthorized, "Empty header")
+		newErrorResponce(c, http.StatusUnauthorized, "empty auth header")
 		return
 	}
 
 	headerParts := strings.Split(header, " ")
-	if len(headerParts) != 2 {
-		newErrorResponce(c, http.StatusUnauthorized, "Header type error")
+	if len(headerParts) != 2 || headerParts[0] != "Bearer" {
+		newErrorResponce(c, http.StatusUnauthorized, "invalid auth header")
+		return
+	}
+
+	if len(headerParts[1]) == 0 {
+		newErrorResponce(c, http.StatusUnauthorized, "token is empty")
 		return
 	}
 
