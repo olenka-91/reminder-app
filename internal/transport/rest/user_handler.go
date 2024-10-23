@@ -5,7 +5,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/olenka--91/reminder-app/internal/domain"
-	"github.com/sirupsen/logrus"
 )
 
 func (h *Handler) signUp(ctx *gin.Context) {
@@ -38,13 +37,15 @@ func (h *Handler) signIn(ctx *gin.Context) {
 	var input signInInput
 
 	if err := ctx.BindJSON(&input); err != nil {
-		logrus.Error(err.Error())
+		newErrorResponce(ctx, http.StatusBadRequest, "invalid input body")
+		return
 	}
 
 	token, err := h.services.Authorization.GenerateToken(input.Username, input.Password)
 
 	if err != nil {
 		newErrorResponce(ctx, http.StatusInternalServerError, err.Error())
+		return
 	}
 
 	ctx.JSON(http.StatusOK, map[string]interface{}{

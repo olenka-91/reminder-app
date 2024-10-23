@@ -5,6 +5,8 @@ import (
 	"github.com/olenka--91/reminder-app/internal/repository"
 )
 
+//go:generate mockgen -source=service.go -destination=mocks/mock.go
+
 type Remind interface {
 	Create(userID int, remind domain.Remind) (int, error)
 	GetByID(userID int, remindID int) (domain.Remind, error)
