@@ -1,0 +1,27 @@
+services:
+  reminder-app:
+    image: reminder-backend-app
+    container_name: reminder-backend-app
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: ./reminder-app         
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    volumes:
+      - ./.bin:/root/
+      - ./configs/:/root/configs/  
+    environment:
+      - DB_PASSWORD=qwerty         
+
+  db:
+    restart: always
+    image: postgres:latest
+    volumes:
+    - ./.database/postgres/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=qwerty
+    ports:
+      - 5436:5432
